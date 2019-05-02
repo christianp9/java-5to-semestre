@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import model.usuario;
 
 /**
  *
@@ -17,6 +20,8 @@ import java.sql.SQLException;
  */
 public class DAOuser {
     database con = new database();
+    usuario user = new usuario();
+   
     public boolean registrarUsuario( String nombre, String apellido, String email,
                           String lenguaje, String hobby){
     Connection conn;
@@ -48,4 +53,52 @@ public class DAOuser {
         }
     return false;
    }
+      public List listar() {
+        Connection conn;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        ArrayList<usuario> list = new ArrayList<>();
+        String sql = "select * from persona";
+        try {
+             conn = con.getConexion();
+           pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            
+            while(rs.next()){
+                usuario per = new usuario();
+                per.setId(rs.getInt("id"));
+                per.setNombre(rs.getString("nombre"));
+                per.setApellido(rs.getString("apellido"));
+                per.setEmail(rs.getString("email"));
+                per.setLenguaje(rs.getString("lenguaje"));
+                per.setHobby(rs.getString("hobby"));
+                list.add(per);
+            }
+            
+        } catch (Exception e) {
+            System.out.println("Listar DAO" + e);
+        }
+        return list;
+    }
+      public usuario list(int id) {
+        String sql="select * from persona where id=";
+        try {
+             Connection conn;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+            while(rs.next()){                
+                user.setId(rs.getInt("id"));
+                user.setNombre(rs.getString("nombre"));
+                user.setEmail(rs.getString("email"));
+                user.setLenguaje(rs.getString("lenguaje"));
+                user.setApellido(rs.getString("apellido"));
+                user.setHobby(rs.getString("hobby"));
+                
+            }
+        } catch (Exception e) {
+            System.out.println("Listar DAO" + e);
+        }
+        return user;
+    }
+
 }
